@@ -10,13 +10,13 @@ matrix:
       install:
         - pip install ansible
       script:
-        - ansible-test sanity --docker default -v
+        - ansible-test sanity --docker default -v plugins/filter/ plugins/test/
     - name: Devel Sanity
       python: 3.7
       install:
         - pip install git+https://github.com/ansible/ansible.git@devel#egg=ansible
       script:
-        - ansible-test sanity --docker default -v
+        - ansible-test sanity --docker default -v plugins/filter/ plugins/test/
 
     # Units
     # - name: Stable Units
