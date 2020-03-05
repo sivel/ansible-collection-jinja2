@@ -1,0 +1,12 @@
+- name: Test tests!
+  assert:
+    that:
+      - _def is sivel.jinja2.defined
+      - undef is sivel.jinja2.undefined
+      - a_map is sivel.jinja2.mapping
+      - _def is sivel.jinja2.string
+      - _def is sivel.jinja2.eq('def')
+  vars:
+    _def: def
+    a_map:
+      foo: bar

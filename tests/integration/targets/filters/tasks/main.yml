@@ -1,0 +1,7 @@
+- name: Test default
+  assert:
+    that:
+      - _def|sivel.jinja2.default('MISSING') != 'MISSING'
+      - undef|sivel.jinja2.default('MISSING') == 'MISSING'
+  vars:
+    _def: def
