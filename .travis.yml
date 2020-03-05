@@ -62,6 +62,8 @@ matrix:
 
     - name: cron only
       python: 3.7
+      install:
+        - pip install ansible
       script:
         - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then python build/vendor.py | egrep -o ".+ already installed"; fi
 
