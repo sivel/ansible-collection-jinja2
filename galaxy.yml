@@ -10,5 +10,5 @@ license_file: "LICENSE"
 tags:
     - jinja
     - jinja2
-repository: "https://www.github.com/sivel/ansible-jinja2"
+repository: "https://github.com/sivel/ansible-collection-jinja2"
 description: Exposes updated jinja2 filters and tests via a collection
