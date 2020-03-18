@@ -107,3 +107,5 @@ tests/output/
 *.tar.gz
 metadata-*.json
 *.swp
+MANIFEST.json
+FILES.json
