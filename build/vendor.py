@@ -93,6 +93,8 @@ def install_jinja2(current_version):
             f.write(text)
             f.truncate()
 
+    return version
+
 
 def main():
     try:
@@ -102,13 +104,16 @@ def main():
     except RuntimeError:
         current_version = None
 
-    install_jinja2(current_version)
+    new_version = install_jinja2(current_version)
 
-    docs_version = '%s.x' % '.'.join(current_version.split('.')[:2])
+    if new_version == current_version:
+        return
+
+    docs_version = '%s.x' % '.'.join(new_version.split('.')[:2])
 
     e = Environment(loader=FileSystemLoader(root))
     t = e.get_template('README.md.j2')
-    out = t.render(version=current_version, docs_version=docs_version)
+    out = t.render(version=new_version, docs_version=docs_version)
     with open(os.path.join(root, 'README.md'), 'w+') as f:
         f.write(out)
 
