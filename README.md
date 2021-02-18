@@ -9,7 +9,7 @@ This can be useful for users who are using an OS that only offers an older versi
 
 ## Jinja2 Version
 
-2.11.2
+2.11.3
 
 ## Jinja2 Documentation
 
