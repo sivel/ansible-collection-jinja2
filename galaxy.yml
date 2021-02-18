@@ -4,8 +4,6 @@ version: "0.0.2"
 readme: "README.md"
 authors:
     - "sivel <matt@sivel.net>"
-license:
-    - "BSD-3-Clause"
 license_file: "LICENSE"
 tags:
     - jinja
