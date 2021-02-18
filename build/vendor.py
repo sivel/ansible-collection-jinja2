@@ -46,7 +46,7 @@ def install_jinja2(current_version):
     version = project_info['info']['version']
     if version == current_version:
         print('%r already installed' % version)
-        return
+        return version
     else:
         print('Upgrading %r to %r' % (current_version, version))
 
