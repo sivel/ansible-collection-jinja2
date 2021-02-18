@@ -1,0 +1,163 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  schedule:
+    - cron: '0 15 * * *'
+
+jobs:
+  sanity:
+    name: sanity | ${{ matrix.ansible.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ansible:
+          - name: stable-2.9
+            package: ansible>=2.9,<2.10
+          - name: stable-2.10
+            package: ansible-base
+          - name: devel
+            package: https://github.com/ansible/ansible/archive/devel.tar.gz
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/sivel/jinja2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install ansible ${{ matrix.ansible.name }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install "${{ matrix.ansible.package }}"
+
+      - name: Debug test env
+        run: |
+          ansible-test env
+        working-directory: ./ansible_collections/sivel/jinja2
+
+      - name: Run sanity tests
+        run: |
+          ansible-test sanity --docker default -v plugins/filter/ plugins/test/
+        working-directory: ./ansible_collections/sivel/jinja2
+
+  units:
+    name: units | ${{ matrix.ansible.name }} | py${{ matrix.python-version }}
+    if: false
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ansible:
+          - name: stable-2.9
+            package: ansible>=2.9,<2.10
+          - name: stable-2.10
+            package: ansible-base
+          - name: devel
+            package: https://github.com/ansible/ansible/archive/devel.tar.gz
+        python-version:
+          - 2.7
+          - 3.5
+          - 3.6
+          - 3.7
+          - 3.8
+          - 3.9
+        exclude:
+          - ansible:
+              name: stable-2.9
+              package: ansible>=2.9,<2.10
+            python-version: 3.9
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/sivel/jinja2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install ansible ${{ matrix.ansible.name }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install "${{ matrix.ansible.package }}"
+
+      - name: Debug test env
+        run: |
+          ansible-test env
+        working-directory: ./ansible_collections/sivel/jinja2
+
+      - name: Run unit tests
+        run: |
+          ansible-test units --docker default --python ${{ matrix.python-version }} -v
+        working-directory: ./ansible_collections/sivel/jinja2
+
+  integration:
+    name: integration | ${{ matrix.ansible.name }} | ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ansible:
+          - name: stable-2.9
+            package: ansible>=2.9,<2.10
+          - name: stable-2.10
+            package: ansible-base
+          - name: devel
+            package: https://github.com/ansible/ansible/archive/devel.tar.gz
+        os:
+          - centos7
+          - centos8
+          - ubuntu1804
+          - ubuntu2004
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/sivel/jinja2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install ansible ${{ matrix.ansible.name }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install "${{ matrix.ansible.package }}"
+
+      - name: Debug test env
+        run: |
+          ansible-test env
+        working-directory: ./ansible_collections/sivel/jinja2
+
+      - name: Run integration tests
+        run: |
+          ansible-test integration --docker ${{ matrix.os }} -v filters tests
+        working-directory: ./ansible_collections/sivel/jinja2
+
+  build:
+    name: build
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/sivel/jinja2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Run build
+        run: |
+          python build/vendor.py | egrep -o ".+ already installed"
