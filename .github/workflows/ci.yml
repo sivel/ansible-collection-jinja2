@@ -170,3 +170,4 @@ jobs:
       - name: Run build
         run: |
           python build/vendor.py | egrep -o ".+ already installed"
+        working-directory: ./ansible_collections/sivel/jinja2
