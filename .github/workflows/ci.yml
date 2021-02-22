@@ -167,6 +167,10 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Install jinja2
+        run: |
+          pip install jinja2
+
       - name: Run build
         run: |
           python build/vendor.py | egrep -o ".+ already installed"
