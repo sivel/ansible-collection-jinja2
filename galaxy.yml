@@ -1,6 +1,6 @@
 namespace: "sivel"
 name: "jinja2"
-version: "0.0.4"
+version: "3.1.2"
 readme: "README.md"
 authors:
     - "sivel <matt@sivel.net>"
@@ -10,3 +10,4 @@ tags:
     - jinja2
 repository: "https://github.com/sivel/ansible-collection-jinja2"
 description: Exposes updated jinja2 filters and tests via a collection
+manifest:
